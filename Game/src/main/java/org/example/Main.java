@@ -21,12 +21,8 @@ public class Main {
     String profile;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Main main = new Main();
-        Properties properties = new Properties();
-        try (InputStream is = new FileInputStream("src/main/resources/application-production.properties")) {
-            properties.load(is);
-        }
         JCommander jCommander = new JCommander(main);
         jCommander.parse(args);
         if (main.enemiesCount + main.wallsCount + 2 > main.size * main.size)
