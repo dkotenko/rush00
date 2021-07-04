@@ -4,6 +4,9 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
+import org.example.exception.GameOverException;
+import org.example.exception.GameWinException;
+import org.example.units.Player;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,63 +29,28 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Main main = new Main();
-        JCommander jCommander = new JCommander(main);
+        JCommander jCommander = new JCommander(new Main());
         try {
             jCommander.parse(args);
         } catch (ParameterException e) {
             Printer.printError("The following options are required: [--profile], [--enemiesCo" +
                     "unt], [--size], [--wallsCount]");
         }
-
         checkArgs();
         PropertiesHelper.setProperties(profile);
-        if (main.enemiesCount + main.wallsCount + 2 > main.size * main.size)
-            throw new IllegalArgumentException();
-        Map map = new Map(main.size, main.wallsCount, main.enemiesCount);
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            map.printMap();
-            String input = getInput(scanner);
-            while (!isValidInput(input, scanner)) {
-                input = getInput(scanner);
-            }
-            //boolean isEnd = doMove();
-            //if (isEnd)
-            //    break;
-        }
-        //printResult();
-    }
-
-    private static String getInput(Scanner scanner) {
-        String input = null;
+        chaseLogicPropertiesInit();
         try {
-            input = scanner.nextLine();
-        }  catch (NoSuchElementException e) {
-            Printer.printError("no line to parse");
+            GameMap map = new GameMap(enemiesCount, wallsCount, size);
+            ActiveUnitsRing activeUnitsRing = new ActiveUnitsRing(map.getEnemies(), new Player(map.getPlayerCoords()));
+            Game game = new Game(map, activeUnitsRing);
+            game.play();
+        } catch (GameOverException e) {
+            System.out.println(e.getMessage() + " Game over!");
+        } catch (GameWinException e) {
+            System.out.println("You won!");
         } catch (IllegalStateException e) {
-            Printer.printError("scanner object is closed");
+            System.out.println("Error: " + e.getMessage());
         }
-        return input;
-    }
-
-    private static boolean isValidInput(String input, Scanner scanner) {
-        if (input.equals("9"))
-            System.exit(1);
-        if (!(input.equals("a") || input.equals("w") ||
-                input.equals("s") || input.equals("d"))) {
-            System.out.println("invalid move command. Use W-A-S-D");
-            return false;
-        }
-        if (PropertiesHelper.isDev) {
-            System.out.println("Enter '8' to confirm your move");
-            String confirm = getInput(scanner);
-            if (!confirm.equals("8")) {
-                System.out.println("Move has not been confirmed");
-                return false;
-            }
-        }
-        return true;
     }
 
     private static void checkArgs() {
@@ -100,7 +68,12 @@ public class Main {
                 profile.equals("prod") ||
                 profile.equals("production")))
             Printer.printError("invalid application profile name: " + profile);
-        if (enemiesCount + wallsCount + 2 > (size * size) / 2)
+        if (enemiesCount + wallsCount + 2 > size * size)
             Printer.printError("invalid parameters set: not enough space for gameplay");
+    }
+
+    private static void chaseLogicPropertiesInit() {
+        ChaseLogicProperties.EMPTY_CHAR = PropertiesHelper.EMPTY_CHAR;
+        ChaseLogicProperties.PLAYER_CHAR = PropertiesHelper.PLAYER_CHAR;
     }
 }

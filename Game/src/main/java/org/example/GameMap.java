@@ -31,16 +31,21 @@ public class GameMap {
     }
 
     private void generatePathMap(int size) {
-        int coords[][] = new int[2][2];
+        int[][] coords = new int[2][2];
         while (Arrays.equals(coords[0], coords[1])) {
             for (int i = 0; i < 2; i++)
                 for (int j = 0; j < 2; j++)
                     coords[i][j] = getRandomN(size);
         }
+
         map[coords[0][0]][coords[0][1]] = PropertiesHelper.PLAYER_CHAR;
-        this.playerCoords = coords[0];
+        this.playerCoords = coords[0].clone();
         map[coords[1][0]][coords[1][1]] = PropertiesHelper.GOAL_CHAR;
-        this.goalCoords = coords[1];
+        this.goalCoords = coords[1].clone();
+        if (PropertiesHelper.isDev) {
+            System.out.println("Coords of player: " + Arrays.toString(playerCoords));
+            System.out.println("Coords of goal: " + Arrays.toString(goalCoords));
+        }
         while (true) {
             pathMap[coords[0][0]][coords[0][1]] = 1;
             pathLength++;
@@ -73,8 +78,12 @@ public class GameMap {
                     if (randValue < sum) {
                         map[i][j] = PropertiesHelper.ENEMY_CHAR;
                         this.enemies.add(new Enemy(new int[]{i, j}));
+                        if (PropertiesHelper.isDev) {
+                            System.out.println("Coords of enemy#" + (enemies - leftEnemies + 1) +
+                                    ": " + Arrays.toString(new int[]{i, j}));
+                        }
                         leftEnemies--;
-                    } else if (randValue < (sum += leftWalls / (double) toGenerate)) {
+                    } else if (randValue < (sum + leftWalls / (double) toGenerate)) {
                         map[i][j] = PropertiesHelper.WALL_CHAR;
                         leftWalls--;
                     }
@@ -120,4 +129,29 @@ public class GameMap {
         return size;
     }
 
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public boolean isEnemy(int x, int y) {
+        return map[x][y] == PropertiesHelper.ENEMY_CHAR;
+    }
+
+    public boolean isGoal(int x, int y) {
+        return map[x][y] == PropertiesHelper.GOAL_CHAR;
+    }
+
+    public boolean isWall(int x, int y) {
+        return map[x][y] == PropertiesHelper.WALL_CHAR;
+    }
+
+    public void replace(int[] newCoords, int[] coords) {
+        char temp = map[coords[0]][coords[1]];
+        map[coords[0]][coords[1]] = map[newCoords[0]][newCoords[1]];
+        map[newCoords[0]][newCoords[1]] = temp;
+    }
+
+    public void setPlayerCoords(int[] playerCoords) {
+        this.playerCoords = playerCoords;
+    }
 }

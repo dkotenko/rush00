@@ -9,6 +9,7 @@ public class PropertiesHelper {
     private static Properties properties;
     private static Properties devProperties;
     private static Properties prodProperties;
+    public static boolean isDev;
 
     public static char ENEMY_CHAR;
     public static char PLAYER_CHAR;
@@ -43,12 +44,15 @@ public class PropertiesHelper {
     }
 
     public static void setProperties(String profile) {
-        if (profile.equals("dev") || profile.equals("developer"))
+        if (profile.equals("dev") || profile.equals("developer")) {
             properties = devProperties;
-        else if (profile.equals("prod") || profile.equals("production"))
+            isDev = true;
+        } else if (profile.equals("prod") || profile.equals("production")) {
             properties = prodProperties;
-        else
+            isDev = false;
+        } else {
             Printer.printError("invalid application profile name: " + profile);
+        }
         initProperties();
     }
 

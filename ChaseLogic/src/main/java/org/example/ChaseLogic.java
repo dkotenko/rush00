@@ -7,44 +7,51 @@ import java.util.*;
 public class ChaseLogic {
 
     public static int[] getNextEnemyMove(int[] enemyCoords, char[][] map,
-                                         int[] playerCoords, int[][] algoMap){
+                                         int[] playerCoords){
+        int[][] algoMap = AlgoMapHelper.makeAlgoMap(map);
         algoMap[enemyCoords[0]][enemyCoords[1]] = 0;
         algoMap[playerCoords[0]][playerCoords[1]] = 0;
-//        printAlgoMap(algoMap);
-        List<int[]> neighbors = getNeighbors(enemyCoords, algoMap);
-//        printNeighbours(neighbors);
-        // TODO: 04.07.2021 если null то враг заблочен
+        List<int[]> neighbors = getNeighbors(map, enemyCoords, algoMap);
         wave(algoMap, enemyCoords, neighbors);
-//        printAlgoMap(algoMap);
         Queue<int[]> neighborsQueue = new ArrayDeque<>(neighbors);
         int[] coords;
         while (!neighborsQueue.isEmpty()) {
             coords = neighborsQueue.poll();
-            neighbors = getNeighbors(coords, algoMap);
+            neighbors = getNeighbors(map, coords, algoMap);
             wave(algoMap, coords, neighbors);
-            if (containsPlayer(neighbors)) {
+            if (containsPlayer(neighbors, playerCoords)) {
                 break;
             }
             neighborsQueue.addAll(neighbors);
         }
-//        System.out.println(map.playerCoords[0] + " " + map.playerCoords[1]);
-//        System.out.println(enemyCoords[0] + " " + enemyCoords[1]);
-//        printAlgoMap(algoMap);
         int[] newCoords;
         if (algoMap[playerCoords[0]][playerCoords[1]] == 0) { // FIXME: 04.07.2021
             throw new EnemyCantReachException();
         } else {
-            List<int[]> pathToPlayer = makePath(algoMap, enemyCoords);
-//            printPath(pathToPlayer);
+            List<int[]> pathToPlayer = makePath(algoMap, playerCoords);
             newCoords = pathToPlayer.get(pathToPlayer.size() - 2);
         }
-        map[enemyCoords[0]][enemyCoords[1]] = ChaseLogicProperties.EMPTY_CHAR;
-        map[newCoords[0]][newCoords[1]] = PropertiesHelper.ENEMY_CHAR;
         return newCoords;
     }
 
 
-
+    public static List<int[]> getNeighbors(char[][] map, int[] cellCoords, int[][] algoMap) {
+        List<int[]> list = new ArrayList<>();
+        int x = cellCoords[0], y = cellCoords[1];
+        if (ChaseLogicHelper.isEmptyOrPlayerAndInBoundsGameMap(map, x + 1, y) && algoMap[x+1][y] == 0) {
+            list.add(new int[]{x + 1, y});
+        }
+        if (ChaseLogicHelper.isEmptyOrPlayerAndInBoundsGameMap(map, x - 1, y) && algoMap[x-1][y] == 0) {
+            list.add(new int[]{x - 1, y});
+        }
+        if (ChaseLogicHelper.isEmptyOrPlayerAndInBoundsGameMap(map, x, y - 1) && algoMap[x][y-1] == 0) {
+            list.add(new int[]{x, y - 1});
+        }
+        if (ChaseLogicHelper.isEmptyOrPlayerAndInBoundsGameMap(map, x, y + 1) && algoMap[x][y+1] == 0) {
+            list.add(new int[]{x, y + 1});
+        }
+        return list;
+    }
 
 
     private static void printPath(List<int[]> path) {
@@ -54,10 +61,10 @@ public class ChaseLogic {
         System.out.println();
     }
 
-    private static List<int[]> makePath(int[][] algoMap, int[] enemyCoords) {
+    private static List<int[]> makePath(int[][] algoMap, int[] playerCoords) {
         List<int[]> path = new LinkedList<>();
-        int startValue = algoMap[map.playerCoords[0]][map.playerCoords[1]];
-        int[] coords = map.playerCoords;
+        int startValue = algoMap[playerCoords[0]][playerCoords[1]];
+        int[] coords = playerCoords;
         path.add(coords);
         while (startValue != 0) {
             coords = findNeighborWithValue(algoMap, coords, --startValue);
@@ -116,6 +123,5 @@ public class ChaseLogic {
         }
         System.out.println();
     }
-
 
 }

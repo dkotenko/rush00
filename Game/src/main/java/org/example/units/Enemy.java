@@ -1,6 +1,5 @@
 package org.example.units;
 
-import com.diogonunes.jcdp.color.api.Ansi;
 import org.example.*;
 import org.example.exception.EnemyCantReachException;
 import org.example.exception.GameOverException;
@@ -13,12 +12,12 @@ public class Enemy extends ActiveUnit {
     }
 
     @Override
-    public int[] getNewCoords(GameMap map, int[] targetCoords) {
+    public int[] getNewCoords(GameMap map) {
         if (checkIfPlayerNear(map)) {
-            throw new GameOverException();
+            return map.getPlayerCoords();
         }
         try {
-            ChaseLogic.getNextEnemyMove(coords, map.getMap(), map.getPlayerCoords(), PreChaseLogic.makeAlgoMap(map));
+            return ChaseLogic.getNextEnemyMove(coords, map.getMap(), map.getPlayerCoords());
         } catch (EnemyCantReachException e) {
             return getCoordsIfEnemySurrounded(map);
         }

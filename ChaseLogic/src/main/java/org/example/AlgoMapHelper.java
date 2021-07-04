@@ -10,4 +10,19 @@ public class AlgoMapHelper {
         return isInBounds(algoMap, x, y) && algoMap[x][y] == value;
     }
 
+    public static int[][] makeAlgoMap(char[][] map) {
+        int size = map.length;
+        int[][] algoMap = new int[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (ChaseLogicHelper.isEmptyGameMap(map, i, j))
+                    algoMap[i][j] = 0;
+                else
+                    algoMap[i][j] = -1;
+            }
+        }
+        return algoMap;
+    }
+
+
 }
