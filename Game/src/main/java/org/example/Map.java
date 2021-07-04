@@ -23,16 +23,16 @@ public class Map {
 	private void initMap(int wallsCount) {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++)
-				map[i][j] = '.';
+				map[i][j] = PropertiesHelper.emptyChar;
 		}
-
+		addPlayer();
 		for (int i = 0; i < wallsCount; i++)
 			addWall();
 	}
 	private void addPlayer() {
 		playerCoords[0] = random.nextInt(size);
 		playerCoords[1] = random.nextInt(size);
-		map[playerCoords[0]][playerCoords[1]] = 'o';
+		map[playerCoords[0]][playerCoords[1]] = PropertiesHelper.playerChar;
 	}
 
 	private void addWall() {
@@ -40,7 +40,7 @@ public class Map {
 		do {
 			i = random.nextInt(size);
 			j = random.nextInt(size);
-		} while (map[i][j] != '.');
+		} while (map[i][j] != PropertiesHelper.emptyChar && map[i][j] != PropertiesHelper.playerChar);
 		map[i][j] = '#';
 	}
 

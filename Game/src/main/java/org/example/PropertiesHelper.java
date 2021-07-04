@@ -8,6 +8,17 @@ public class PropertiesHelper {
 
     private static Properties properties;
 
+    public static char enemyChar;
+    public static char playerChar;
+    public static char wallChar;
+    public static char goalChar;
+    public static char emptyChar;
+    public static String enemyColor;
+    public static String playerColor;
+    public static String wallColor;
+    public static String goalColor;
+    public static String emptyColor;
+
     static {
         properties = new Properties();
         try {
@@ -17,10 +28,21 @@ public class PropertiesHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        enemyChar = getPropertyCharAndCheck("enemy.char");
+        playerChar = getPropertyCharAndCheck("player.char");
+        wallChar = getPropertyCharAndCheck("wall.char");
+        goalChar = getPropertyCharAndCheck("goal.char");
+        emptyChar = getPropertyCharAndCheck("empty.char");
+        enemyColor = properties.getProperty("enemy.color");
+        playerColor = properties.getProperty("player.color");
+        wallColor = properties.getProperty("wall.color");
+        goalColor = properties.getProperty("goal.color");
+        emptyColor = properties.getProperty("empty.color");
     }
 
-    public static String getPropertyByKey(String name) {
-        return properties.getProperty(name);
+    private static char getPropertyCharAndCheck(String name) {
+        String charString = properties.getProperty(name);
+        return charString.length() != 0 ? charString.charAt(0) : ' ';
     }
 
 }
