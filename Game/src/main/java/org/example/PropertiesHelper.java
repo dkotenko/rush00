@@ -7,8 +7,8 @@ import java.util.Properties;
 public class PropertiesHelper {
 
     private static Properties properties;
-    private static Properties devProperties;
-    private static Properties prodProperties;
+    private static final Properties devProperties;
+    private static final Properties prodProperties;
     public static boolean isDev;
 
     public static char ENEMY_CHAR;

@@ -4,7 +4,7 @@ public enum MoveCommands {
 
     LEFT("1"), UP("2"), RIGHT("3"), DOWN("4"), GIVE_UP("9");
 
-    private String number;
+    private final String number;
 
     MoveCommands(String number) {
         this.number = number;

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActiveUnitsRing {
-    private List<ActiveUnit> activeUnits;
-    private Player player;
+    private final List<ActiveUnit> activeUnits;
+    private final Player player;
 
     public ActiveUnitsRing(List<Enemy> enemies, Player player) {
         activeUnits = new ArrayList<>();

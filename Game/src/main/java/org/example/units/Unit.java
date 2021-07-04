@@ -4,8 +4,8 @@ import com.diogonunes.jcdp.color.api.Ansi.BColor;
 
 public abstract class Unit {
     protected int[] coords;
-    private char symbol;
-    private BColor bColor;
+    private final char symbol;
+    private final BColor bColor;
 
     public Unit(char symbol, BColor bColor) {
         this.symbol = symbol;

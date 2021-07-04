@@ -10,13 +10,13 @@ import java.util.stream.IntStream;
 
 public class GameMap {
 
-    private char[][] map;
-    private int size;
+    private final char[][] map;
+    private final int size;
 
-    private int[][] pathMap;
+    private final int[][] pathMap;
     private int pathLength;
 
-    private List<Enemy> enemies;
+    private final List<Enemy> enemies;
     private int[] playerCoords;
     private int[] goalCoords;
 

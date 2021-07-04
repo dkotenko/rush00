@@ -13,9 +13,9 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Game {
-    private GameMap map;
-    private ActiveUnitsRing activeUnitsRing;
-    private Scanner scanner;
+    private final GameMap map;
+    private final ActiveUnitsRing activeUnitsRing;
+    private final Scanner scanner;
 
     public Game(GameMap map, ActiveUnitsRing activeUnitsRing) {
         this.map = map;

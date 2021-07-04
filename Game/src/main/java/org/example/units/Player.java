@@ -1,6 +1,5 @@
 package org.example.units;
 
-import com.diogonunes.jcdp.color.api.Ansi;
 import org.example.GameMap;
 import org.example.MoveCommands;
 import org.example.Printer;
@@ -14,7 +13,7 @@ import java.util.Scanner;
 
 public class Player extends ActiveUnit {
 
-    private Scanner scanner;
+    private final Scanner scanner;
 
 
     public Player(int[] coords) {
