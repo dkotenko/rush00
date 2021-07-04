@@ -50,7 +50,9 @@ public class Map {
 
 
 	public void printMap() {
-
+		if (PropertiesHelper.isDev) {
+			System.out.print("\033[2J\033[1;1H");
+		}
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				Printer.getPrinter(map[i][j])
