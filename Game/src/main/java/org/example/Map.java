@@ -1,5 +1,7 @@
 package org.example;
 
+import com.diogonunes.jcdp.color.ColoredPrinter;
+
 import java.util.Random;
 
 public class Map {
@@ -17,7 +19,8 @@ public class Map {
 		this.playerCoords = new int[2];
 		this.enemiesCount = enemiesCount;
 		this.enemiesCoords = new int[2][enemiesCount];
-		initMap(wallsCount);
+		map = MapGenerator.generate(enemiesCount, wallsCount, size);
+		//initMap(wallsCount);
 	}
 
 	private void initMap(int wallsCount) {
@@ -47,9 +50,12 @@ public class Map {
 
 
 	public void printMap() {
+
 		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++)
-				System.out.print(map[i][j] + " ");
+			for (int j = 0; j < size; j++) {
+				Printer.getPrinter(map[i][j])
+						.print(map[i][j]);
+			}
 			System.out.println();
 		}
 	}
