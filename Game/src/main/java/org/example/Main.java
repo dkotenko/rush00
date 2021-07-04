@@ -23,8 +23,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Main main = new Main();
-        JCommander jCommander = new JCommander(main);
+        JCommander jCommander = new JCommander(new Main());
         try {
             jCommander.parse(args);
         } catch (ParameterException e) {
@@ -35,11 +34,10 @@ public class Main {
         checkArgs();
         PropertiesHelper.setProperties(profile);
 
-        if (main.enemiesCount + main.wallsCount + 2 > main.size * main.size)
-            throw new IllegalArgumentException();
-        Map map = new Map(main.size, main.wallsCount, main.enemiesCount);
+        GameMap map = new GameMap(size, wallsCount, enemiesCount);
         map.printMap();
-        System.out.printf("--enemiesCount=%d --wallsCount=%d --size=%d ==profile=%s%n", main.enemiesCount, main.wallsCount, main.size, main.profile);
+        System.out.printf("--enemiesCount=%d --wallsCount=%d --size=%d ==profile=%s%n",
+                enemiesCount, wallsCount, size, profile);
     }
 
     private static void checkArgs() {
@@ -57,7 +55,7 @@ public class Main {
                 profile.equals("prod") ||
                 profile.equals("production")))
             Printer.printError("invalid application profile name: " + profile);
-        if (enemiesCount + wallsCount + 2 > (size * size) / 2)
+        if (enemiesCount + wallsCount + 2 > size * size)
             Printer.printError("invalid parameters set: not enough space for gameplay");
     }
 }

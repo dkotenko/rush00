@@ -3,7 +3,6 @@ package org.example;
 import com.diogonunes.jcdp.color.ColoredPrinter;
 import com.diogonunes.jcdp.color.api.Ansi;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 public class Printer {
@@ -14,11 +13,11 @@ public class Printer {
     static ColoredPrinter wallPrinter;
 
     static {
-        enemyPrinter = Printer.initPrinter(PropertiesHelper.enemyColor);
-        emptyPrinter = Printer.initPrinter(PropertiesHelper.emptyColor);
-        playerPrinter = Printer.initPrinter(PropertiesHelper.playerColor);
-        goalPrinter = Printer.initPrinter(PropertiesHelper.goalColor);
-        wallPrinter = Printer.initPrinter(PropertiesHelper.wallColor);
+        enemyPrinter = Printer.initPrinter(PropertiesHelper.ENEMY_COLOR);
+        emptyPrinter = Printer.initPrinter(PropertiesHelper.EMPTY_COLOR);
+        playerPrinter = Printer.initPrinter(PropertiesHelper.PLAYER_COLOR);
+        goalPrinter = Printer.initPrinter(PropertiesHelper.GOAL_COLOR);
+        wallPrinter = Printer.initPrinter(PropertiesHelper.WALL_COLOR);
     }
 
     public static void printError(String message)
@@ -29,75 +28,60 @@ public class Printer {
 
 
     public static ColoredPrinter getPrinter(char c) {
-        if (c == PropertiesHelper.emptyChar) {
+        if (c == PropertiesHelper.EMPTY_CHAR) {
             return emptyPrinter;
         }
-        else if (c == PropertiesHelper.playerChar) {
+        else if (c == PropertiesHelper.PLAYER_CHAR) {
             return playerPrinter;
         }
-        else if (c == PropertiesHelper.enemyChar) {
+        else if (c == PropertiesHelper.ENEMY_CHAR) {
             return enemyPrinter;
         }
-        else if (c == PropertiesHelper.wallChar) {
+        else if (c == PropertiesHelper.WALL_CHAR) {
             return wallPrinter;
         }
-        else if (c == PropertiesHelper.goalChar) {
+        else if (c == PropertiesHelper.GOAL_CHAR) {
             return goalPrinter;
         }
         Printer.printError("invalid char at map: " + c);
         return null;
     }
 
-    private static ColoredPrinter initPrinter(String color) {
+    public static Ansi.BColor determineColor(String color) {
         color = color.toLowerCase(Locale.ROOT);
-        ColoredPrinter cp = null;
 
         switch (color) {
             case "black":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.WHITE).background(Ansi.BColor.BLACK)
-                        .build();
-                break ;
+                return Ansi.BColor.BLACK;
             case "green":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.GREEN)
-                        .build();
-                break ;
+                return Ansi.BColor.GREEN;
             case "red":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.RED)
-                        .build();
-                break ;
+                return Ansi.BColor.RED;
             case "yellow":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.YELLOW)
-                        .build();
-                break ;
+                return Ansi.BColor.YELLOW;
             case "blue":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.BLUE)
-                        .build();
-                break ;
+                return Ansi.BColor.BLUE;
             case "magenta":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.MAGENTA)
-                        .build();
-                break ;
+                return Ansi.BColor.MAGENTA;
             case "cyan":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.CYAN)
-                        .build();
-                break ;
+                return Ansi.BColor.CYAN;
             case "white":
-                cp = new ColoredPrinter.Builder(1, false)
-                        .foreground(Ansi.FColor.BLACK).background(Ansi.BColor.WHITE)
-                        .build();
-                break ;
+                return Ansi.BColor.WHITE;
             default:
                 System.err.println("Error: invalid color '" + color + "'");
                 System.exit(-1);
         }
-        return cp;
+        throw new IllegalStateException();
+    }
+
+    private static ColoredPrinter initPrinter(String color) {
+        Ansi.BColor bColor = determineColor(color);
+        if (Ansi.BColor.BLACK.equals(bColor)) {
+            return new ColoredPrinter.Builder(1, false)
+                    .foreground(Ansi.FColor.WHITE).background(bColor).build();
+        }
+        return new ColoredPrinter.Builder(1, false)
+                .foreground(Ansi.FColor.BLACK).background(bColor).build();
     }
 
 }

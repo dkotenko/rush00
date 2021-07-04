@@ -10,16 +10,16 @@ public class PropertiesHelper {
     private static Properties devProperties;
     private static Properties prodProperties;
 
-    public static char enemyChar;
-    public static char playerChar;
-    public static char wallChar;
-    public static char goalChar;
-    public static char emptyChar;
-    public static String enemyColor;
-    public static String playerColor;
-    public static String wallColor;
-    public static String goalColor;
-    public static String emptyColor;
+    public static char ENEMY_CHAR;
+    public static char PLAYER_CHAR;
+    public static char WALL_CHAR;
+    public static char GOAL_CHAR;
+    public static char EMPTY_CHAR;
+    public static String ENEMY_COLOR;
+    public static String PLAYER_COLOR;
+    public static String WALL_COLOR;
+    public static String GOAL_COLOR;
+    public static String EMPTY_COLOR;
 
     static {
         devProperties = new Properties();
@@ -53,16 +53,16 @@ public class PropertiesHelper {
     }
 
     private static void initProperties () {
-        enemyChar = getPropertyCharAndCheck("enemy.char");
-        playerChar = getPropertyCharAndCheck("player.char");
-        wallChar = getPropertyCharAndCheck("wall.char");
-        goalChar = getPropertyCharAndCheck("goal.char");
-        emptyChar = getPropertyCharAndCheck("empty.char");
-        enemyColor = properties.getProperty("enemy.color");
-        playerColor = properties.getProperty("player.color");
-        wallColor = properties.getProperty("wall.color");
-        goalColor = properties.getProperty("goal.color");
-        emptyColor = properties.getProperty("empty.color");
+        ENEMY_CHAR = getPropertyCharAndCheck("enemy.char");
+        PLAYER_CHAR = getPropertyCharAndCheck("player.char");
+        WALL_CHAR = getPropertyCharAndCheck("wall.char");
+        GOAL_CHAR = getPropertyCharAndCheck("goal.char");
+        EMPTY_CHAR = getPropertyCharAndCheck("empty.char");
+        ENEMY_COLOR = properties.getProperty("enemy.color");
+        PLAYER_COLOR = properties.getProperty("player.color");
+        WALL_COLOR = properties.getProperty("wall.color");
+        GOAL_COLOR = properties.getProperty("goal.color");
+        EMPTY_COLOR = properties.getProperty("empty.color");
     }
 
 }
