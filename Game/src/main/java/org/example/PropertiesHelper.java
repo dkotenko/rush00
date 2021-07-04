@@ -20,6 +20,7 @@ public class PropertiesHelper {
     public static String wallColor;
     public static String goalColor;
     public static String emptyColor;
+    public static boolean isDev;
 
     static {
         devProperties = new Properties();
@@ -43,10 +44,17 @@ public class PropertiesHelper {
     }
 
     public static void setProperties(String profile) {
-        if (profile.equals("dev") || profile.equals("developer"))
+        if (profile.equals("dev") || profile.equals("developer")) {
             properties = devProperties;
+            isDev = true;
+        }
+
         else if (profile.equals("prod") || profile.equals("production"))
+        {
             properties = prodProperties;
+            isDev = false;
+        }
+
         else
             Printer.printError("invalid application profile name: " + profile);
         initProperties();
